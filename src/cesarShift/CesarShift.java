@@ -22,7 +22,7 @@ public class CesarShift {
 		criaPadrao();
 		do {
 			if (criptografar) {
-				
+				criptografar();
 			} else {
 				descriptografar();
 			}
@@ -31,9 +31,74 @@ public class CesarShift {
 		} while (repetir == 'y' || repetir == 's' );
 	}
 
+	private void criptografar() throws IOException 
+	{
+		System.out.print("Entre com a frase a ser criptografada: ");
+		fraseCripto = scan.readLine();
+		int trocas = 0;
+		boolean numValido = false;
+
+		System.out.println("\nEx: -5 -> E passaria a ser A");
+		System.out.println("Ex: 5 -> A passaria a ser E");
+		while (!numValido)
+		{
+			System.out.print("Entre com o número de trocas (-25 a 25 ≠ 0): ");
+			try
+			{
+				trocas = Integer.parseInt(scan.readLine());
+				if (trocas == 0 || trocas < -25 ||trocas > 25) 
+				{
+					System.out.println("Número inválido! Entre com um número entre -25 e 25 com excessão do 0");
+				}
+				else
+				{
+					numValido = true;
+				}
+			}
+			catch (NumberFormatException e)
+			{
+				System.out.println("Entrada inválida!");
+				trocas = 0;
+			}
+		}
+		
+		if (trocas < 0) 
+		{
+			trocas = trocas+26;
+		}
+		
+		System.out.println("\nResultado:");
+		for (int i = 0; i < fraseCripto.length(); i++) {
+			if (fraseCripto.charAt(i) >= ((char)97) &&  fraseCripto.charAt(i) <= ((char)122)) {
+				for (int j = 0; j < padraoMin.length; j++) {
+					if (fraseCripto.charAt(i) == padraoMin[j]) 
+					{
+						System.out.print(padraoMin[(trocas+j)%26]);
+						break;
+					}
+				}
+			}
+			else if (fraseCripto.charAt(i) >= ((char)65) && fraseCripto.charAt(i) <= ((char)90))
+				{
+					for (int j = 0; j < padraoMai.length; j++) {
+						if (fraseCripto.charAt(i) == padraoMai[j]) 
+						{
+							System.out.print(padraoMai[(trocas+j)%26]);
+							break;
+						}
+					}
+				}
+			else
+			{
+				System.out.print(fraseCripto.charAt(i));
+			}
+		}
+		System.out.println("\n");
+	}
+
 	private void descriptografar() throws IOException {
 		
-		System.out.print("\nEntre com a frase a ser descriptografada: ");
+		System.out.print("\nEntre com a frase a ser decriptografada: ");
 		fraseCripto = scan.readLine();
 		System.out.println("\nAs 25 possibilidades de troca serão mostradas.\nPressione ENTER para continuar");
 		scan.readLine();
@@ -45,6 +110,7 @@ public class CesarShift {
 							if (fraseCripto.charAt(i) == padraoMin[j]) 
 							{
 								System.out.print(padraoMin[(k+j)%26]);
+								break;
 							}
 						}
 				}
